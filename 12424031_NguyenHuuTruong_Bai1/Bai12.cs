@@ -76,7 +76,6 @@ namespace BaiThucHanh
                     double a = double.Parse(tokens[i - 1]);
                     double b = double.Parse(tokens[i + 1]);
                     double result = tokens[i] == "*" ? a * b : a / b;
-
                     tokens[i - 1] = result.ToString();
                     tokens.RemoveAt(i);
                     tokens.RemoveAt(i);

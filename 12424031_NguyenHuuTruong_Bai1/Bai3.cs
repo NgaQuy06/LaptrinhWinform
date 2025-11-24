@@ -24,14 +24,14 @@ namespace BaiThucHanh
 
         private void btnCapNhat_Click(object sender, EventArgs e)
         {
-            if (txt.Text != "")
+            int a;
+            if (txt.Text != "" && int.TryParse(txt.Text, out a))
             {
                 cbo.Items.Add(txt.Text);
                 txt.Text = "";
                 txt.Focus();
             }
-            else
-                MessageBox.Show("Vui long nhap du lieu");
+            else MessageBox.Show("Vui long nhap dung du lieu");
         }
 
         private void cbo_SelectedIndexChanged(object sender, EventArgs e)
@@ -44,7 +44,7 @@ namespace BaiThucHanh
             int tong = 0;
             for (int i = 0; i < lst.Items.Count; i++)
             {
-                int tmp = Convert.ToInt16(lst.Items[i]);
+                int tmp = int.Parse(lst.Items[i].ToString());
                 for (int j = 1; j <= tmp; j++)
                 {
                     if (tmp % j == 0)
@@ -61,7 +61,7 @@ namespace BaiThucHanh
             int tong = 0;
             for (int i = 0; i < lst.Items.Count; i++)
             {
-                int tmp = Convert.ToInt16(lst.Items[i]);
+                int tmp = int.Parse(lst.Items[i].ToString());
                 for (int j = 1; j <= tmp; j++)
                 {
                     if (tmp % j == 0)
@@ -78,7 +78,31 @@ namespace BaiThucHanh
 
         private void btnNguyen_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Ban can nap tien de su dung tinh nang nay!", "Thong bao");
+            int tong = 0;
+            for (int i = 0; i < lst.Items.Count; i++)
+            {
+                int tmp = int.Parse(lst.Items[i].ToString());
+                for (int j = 1; j <= tmp; j++)
+                {
+                    if (tmp % j == 0)
+                    {
+                        bool kt = true;
+                        if (j != 1)
+                        {
+                            for (int k = 2; k < j; k++)
+                            {
+                                if (j % k == 0)
+                                {
+                                    kt = false;
+                                    break;
+                                }
+                            }
+                            if (kt) tong++;
+                        }
+                    }
+                }
+            }
+            MessageBox.Show("So luong cac uoc so nguyen la: " + tong);
         }
 
         private void Bai3_Load(object sender, EventArgs e)

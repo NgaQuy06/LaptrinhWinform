@@ -29,7 +29,8 @@ namespace BaiThucHanh
                 RadioButton rdo = sender as RadioButton;
                 if (rdo.Checked)
                 {
-                    txtHienThi.Font = new Font(new FontFamily(rdo.Text), txtHienThi.Font.Size);
+                    FontFamily ff = new FontFamily(rdo.Text);
+                    txtHienThi.Font = new Font(ff, txtHienThi.Font.Size);
                 }
             }
         }

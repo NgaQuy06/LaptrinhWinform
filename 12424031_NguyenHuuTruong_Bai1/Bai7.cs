@@ -21,27 +21,19 @@ namespace BaiThucHanh
         {
             DateTime time = DateTime.Now;
             int a;
-            bool kt = false;
-            if (txtName.Text == "")
+            bool kt = true;
+            if (txtName.Text.Trim() == "")
             {
                 errorProvider1.SetError(txtName, "Ban chua nhap ten");
                 kt = false;
             }
-            else
-            {
-                errorProvider1.SetError(txtName, "");
-                kt = true;
-            }
+            else errorProvider1.SetError(txtName, "");
             if (!int.TryParse(txtYear.Text, out a))
             {
                 errorProvider1.SetError(txtYear, "Ban phai nhap so");
                 kt = false;
             }
-            else
-            {
-                errorProvider1.SetError(txtYear, "");
-                kt = true;
-            }
+            else errorProvider1.SetError(txtYear, "");
             if (kt)
             {
                 int age = time.Year - int.Parse(txtYear.Text);

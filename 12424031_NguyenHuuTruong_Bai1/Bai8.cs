@@ -21,7 +21,7 @@ namespace BaiThucHanh
         {
             txtA.Text = "";
             txtB.Text = "";
-            txtNghiem.Text = "";
+            lblNghiem.Text = "";
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -42,13 +42,25 @@ namespace BaiThucHanh
             }
             else
             {
-                txtNghiem.Text = (-float.Parse(txtB.Text) / float.Parse(txtA.Text)).ToString();
+                lblNghiem.Text = (float.Parse(txtB.Text) / float.Parse(txtA.Text)).ToString();
             }
         }
 
         private void Bai8_Load(object sender, EventArgs e)
         {
+            
+        }
 
+        private void txtA_TextChanged(object sender, EventArgs e)
+        {
+            if (txtA.Text == "" && txtB.Text == "") btnXoa.Enabled = false;
+            else btnXoa.Enabled = true;
+        }
+
+        private void txtB_TextChanged(object sender, EventArgs e)
+        {
+            if (txtA.Text == "" && txtB.Text == "") btnXoa.Enabled = false;
+            else btnXoa.Enabled = true;
         }
     }
 }
