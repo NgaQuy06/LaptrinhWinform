@@ -177,21 +177,36 @@ namespace BaiThucHanh3
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            if (txtMa.Text.Trim() == "")
+            string sql = "SELECT MaNV, TenNV, DiaChi, TenDN, MatKhau, QuyenHan FROM NhanVien " +
+                "WHERE MaNV LIKE @ma";
+            try
             {
-                MessageBox.Show("Nhập mã nhân viên cần tìm");
-                return;
-            }
-            foreach (DataGridViewRow r in dgvNhanVien.Rows)
-            {
-                if (r.Cells["MaNV"].Value?.ToString() == txtMa.Text.Trim())
+                Program.Db.Open();
+                SqlCommand cmd = new SqlCommand(sql, Program.Db.Connection);
+                cmd.Parameters.AddWithValue("@ma", txtMa.Text.Trim());
+                SqlDataReader dr = cmd.ExecuteReader();
+                dgvNhanVien.Rows.Clear();
+                while (dr.Read())
                 {
-                    r.Selected = true;
-                    dgvNhanVien.FirstDisplayedScrollingRowIndex = r.Index;
-                    dgvNhanVien_CellContentClick(null, new DataGridViewCellEventArgs(0, r.Index));
-                    return;
+                    dgvNhanVien.Rows.Add(
+                        dr["MaNV"].ToString(),
+                        dr["TenNV"].ToString(),
+                        dr["DiaChi"].ToString(),
+                        dr["TenDN"].ToString(),
+                        dr["MatKhau"].ToString(),
+                        dr["QuyenHan"].ToString()
+                    );
                 }
+
+                dr.Close();
+                Program.Db.Close();
             }
+            catch (Exception ex)
+            {
+                Program.Db.Close();
+                MessageBox.Show("Lỗi: " + ex.Message);
+            }
+            
         }
     }
 }
