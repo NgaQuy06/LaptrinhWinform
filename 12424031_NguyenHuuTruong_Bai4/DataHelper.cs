@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BaiThucHanh4;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BaiThucHanh3
+namespace BaiThucHanh4
 {
     internal class DataHelper
     {
@@ -61,6 +62,56 @@ namespace BaiThucHanh3
                 sw.WriteLine(password);
             }
         }
-        
+        private SqlDataAdapter _adapter;
+        public DataTable FillDataTable(string sql)
+        {
+            _adapter = new SqlDataAdapter(sql, con);
+            DataTable dt = new DataTable();
+            _adapter.Fill(dt);
+            return dt;
+        }
+
+        public void InsertTable(DataTable dt, object[] values)
+        {
+            DataRow row = dt.NewRow();
+            for (int i = 0; i < values.Length; i++)
+                row[i] = values[i];
+            dt.Rows.Add(row);
+        }
+
+        public void UpdateTable(DataTable dt, object[] values)
+        {
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["MaNV"].ToString() == values[0].ToString())
+                {
+                    row["TenNV"] = values[1];
+                    row["DiaChi"] = values[2];
+                    row["TenDN"] = values[3];
+                    row["MatKhau"] = values[4];
+                    row["QuyenHan"] = values[5];
+                    break;
+                }
+            }
+        }
+
+        public void DeleteTable(DataTable dt, string maNV)
+        {
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["MaNV"].ToString() == maNV)
+                {
+                    row.Delete();
+                    break;
+                }
+            }
+        }
+
+        public void UpdateTableToDatabase(DataTable dt, string tableName)
+        {
+            _adapter = new SqlDataAdapter("SELECT * FROM " + tableName, con);
+            SqlCommandBuilder builder = new SqlCommandBuilder(_adapter);
+            _adapter.Update(dt);
+        }
     }
 }

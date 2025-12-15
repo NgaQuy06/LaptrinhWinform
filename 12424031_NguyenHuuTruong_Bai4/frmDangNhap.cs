@@ -8,9 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
 
-namespace BaiThucHanh3
+namespace BaiThucHanh4
 {
     public partial class frmDangNhap : Form
     {
@@ -69,6 +68,11 @@ namespace BaiThucHanh3
             {
                 MessageBox.Show("Lỗi: " + ex.Message);
             }
+        }
+
+        private void frmDangNhap_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

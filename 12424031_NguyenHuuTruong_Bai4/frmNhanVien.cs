@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BaiThucHanh3
+namespace BaiThucHanh4
 {
     public partial class frmNhanVien : Form
     {
@@ -18,6 +18,9 @@ namespace BaiThucHanh3
             InitializeComponent();
         }
 
+        DataHelper db;
+        DataTable dtNhanVien;
+
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -25,55 +28,16 @@ namespace BaiThucHanh3
 
         private void frmNhanVien_Load(object sender, EventArgs e)
         {
-            dgvNhanVien.Columns.Clear();
-            dgvNhanVien.Columns.Add("MaNV", "Mã NV");
-            dgvNhanVien.Columns.Add("TenNV", "Tên NV");
-            dgvNhanVien.Columns.Add("DiaChi", "Địa chỉ");
-            dgvNhanVien.Columns.Add("TenDN", "Tên đăng nhập");
-            dgvNhanVien.Columns.Add("MatKhau", "Mật khẩu");
-            dgvNhanVien.Columns.Add("QuyenHan", "Quyền hạn");
-
-            // Nạp quyền hạn
-            cboQuyen.Items.Clear();
-            cboQuyen.Items.Add("Quản trị");
-            cboQuyen.Items.Add("Nhân viên");
-            cboQuyen.SelectedIndex = 0;
-
-            dgvNhanVien.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-            LoadData();
-        }
-        private void LoadData()
-        {
-            dgvNhanVien.Rows.Clear();
-
-            Program.Db.Open();
-            string sql = "SELECT MaNV, TenNV, DiaChi, TenDN, MatKhau, QuyenHan FROM NhanVien";
-            SqlCommand cmd = new SqlCommand(sql, Program.Db.Connection);
-            SqlDataReader dr = cmd.ExecuteReader();
-
-            while (dr.Read())
-            {
-                dgvNhanVien.Rows.Add(
-                    dr["MaNV"].ToString(),
-                    dr["TenNV"].ToString(),
-                    dr["DiaChi"].ToString(),
-                    dr["TenDN"].ToString(),
-                    dr["MatKhau"].ToString(),
-                    dr["QuyenHan"].ToString()
-                );
-            }
-
-            dr.Close();
-            Program.Db.Close();
+            dtNhanVien = Program.Db.FillDataTable("SELECT MaNV, TenNV, DiaChi, TenDN, MatKhau, QuyenHan FROM NhanVien");
+            dgvNhanVien.DataSource = dtNhanVien;
+            cboQuyen.Items.Add("Quản Trị");
+            cboQuyen.Items.Add("Nhân Viên");
         }
 
         private void dgvNhanVien_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-
             DataGridViewRow r = dgvNhanVien.Rows[e.RowIndex];
-
             txtMa.Text = r.Cells["MaNV"].Value?.ToString();
             txtTenNV.Text = r.Cells["TenNV"].Value?.ToString();
             txtDiaChi.Text = r.Cells["DiaChi"].Value?.ToString();
@@ -83,64 +47,46 @@ namespace BaiThucHanh3
         }
         private void btnMoi_Click(object sender, EventArgs e)
         {
-            string sql = "INSERT INTO NhanVien(MaNV, TenNV, DiaChi, TenDN, MatKhau, QuyenHan) " +
-             "VALUES (@ma, @ten, @dc, @tendn, @mk, @qh)";
-
             try
             {
-                Program.Db.Open();
-                SqlCommand cmd = new SqlCommand(sql, Program.Db.Connection);
-                cmd.Parameters.AddWithValue("@ma", txtMa.Text.Trim());
-                cmd.Parameters.AddWithValue("@ten", txtTenNV.Text.Trim());
-                cmd.Parameters.AddWithValue("@dc", txtDiaChi.Text.Trim());
-                cmd.Parameters.AddWithValue("@tendn", txtTenDN.Text.Trim());
-                cmd.Parameters.AddWithValue("@mk", txtMatKhau.Text.Trim());
-                cmd.Parameters.AddWithValue("@qh", cboQuyen.Text.Trim());
-
-                int n = cmd.ExecuteNonQuery();
-                Program.Db.Close();
-
-                if (n > 0)
+                object[] values =
                 {
-                    MessageBox.Show("Thêm thành công");
-                    LoadData();
-                }
+                    txtMa.Text,
+                    txtTenNV.Text,
+                    txtDiaChi.Text,
+                    txtTenDN.Text,
+                    txtMatKhau.Text,
+                    cboQuyen.Text
+                };
+
+                Program.Db.InsertTable(dtNhanVien, values);
+                Program.Db.UpdateTableToDatabase(dtNhanVien, "nhanvien");
             }
             catch (Exception ex)
             {
-                Program.Db.Close();
                 MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            string sql = "UPDATE NhanVien SET TenNV=@ten, DiaChi=@dc, TenDN=@tendn, " +
-            "MatKhau=@mk, QuyenHan=@qh WHERE MaNV=@ma";
-
             try
             {
-                Program.Db.Open();
-                SqlCommand cmd = new SqlCommand(sql, Program.Db.Connection);
-                cmd.Parameters.AddWithValue("@ma", txtMa.Text.Trim());
-                cmd.Parameters.AddWithValue("@ten", txtTenNV.Text.Trim());
-                cmd.Parameters.AddWithValue("@dc", txtDiaChi.Text.Trim());
-                cmd.Parameters.AddWithValue("@tendn", txtTenDN.Text.Trim());
-                cmd.Parameters.AddWithValue("@mk", txtMatKhau.Text.Trim());
-                cmd.Parameters.AddWithValue("@qh", cboQuyen.Text.Trim());
-
-                int n = cmd.ExecuteNonQuery();
-                Program.Db.Close();
-
-                if (n > 0)
+                object[] values =
                 {
-                    MessageBox.Show("Sửa thành công");
-                    LoadData();
-                }
+                    txtMa.Text,
+                    txtTenNV.Text,
+                    txtDiaChi.Text,
+                    txtTenDN.Text,
+                    txtMatKhau.Text,
+                    cboQuyen.Text
+                };
+
+                Program.Db.UpdateTable(dtNhanVien, values);
+                Program.Db.UpdateTableToDatabase(dtNhanVien, "nhanvien");
             }
             catch (Exception ex)
             {
-                Program.Db.Close();
                 MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
@@ -148,65 +94,52 @@ namespace BaiThucHanh3
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Xóa nhân viên này?", "Xác nhận",
-                   MessageBoxButtons.YesNo) == DialogResult.No)
+                    MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
-
-            string sql = "DELETE FROM NhanVien WHERE MaNV=@ma";
-
             try
             {
-                Program.Db.Open();
-                SqlCommand cmd = new SqlCommand(sql, Program.Db.Connection);
-                cmd.Parameters.AddWithValue("@ma", txtMa.Text.Trim());
-
-                int n = cmd.ExecuteNonQuery();
-                Program.Db.Close();
-
-                if (n > 0)
-                {
-                    MessageBox.Show("Xóa thành công");
-                    LoadData();
-                }
+                Program.Db.DeleteTable(dtNhanVien, txtMa.Text);
+                Program.Db.UpdateTableToDatabase(dtNhanVien, "nhanvien");
             }
             catch (Exception ex)
             {
-                Program.Db.Close();
                 MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            string sql = "SELECT MaNV, TenNV, DiaChi, TenDN, MatKhau, QuyenHan FROM NhanVien " +
-                "WHERE MaNV LIKE @ma";
-            try
+            string cot = "MaNV";
+            string giaTri = txtMa.Text.Trim();
+            if (giaTri == "")
             {
-                Program.Db.Open();
-                SqlCommand cmd = new SqlCommand(sql, Program.Db.Connection);
-                cmd.Parameters.AddWithValue("@ma", txtMa.Text.Trim());
-                SqlDataReader dr = cmd.ExecuteReader();
-                dgvNhanVien.Rows.Clear();
-                while (dr.Read())
-                {
-                    dgvNhanVien.Rows.Add(
-                        dr["MaNV"].ToString(),
-                        dr["TenNV"].ToString(),
-                        dr["DiaChi"].ToString(),
-                        dr["TenDN"].ToString(),
-                        dr["MatKhau"].ToString(),
-                        dr["QuyenHan"].ToString()
-                    );
-                }
+                MessageBox.Show("Vui lòng nhập nội dung tìm kiếm");
+                return;
+            }
 
-                dr.Close();
-                Program.Db.Close();
-            }
-            catch (Exception ex)
-            {
-                Program.Db.Close();
-                MessageBox.Show("Lỗi: " + ex.Message);
-            }
-            
+            DataView dv = new DataView(dtNhanVien);
+
+            dv.RowFilter = $"{cot} LIKE '%{giaTri}%'";
+
+            dgvNhanVien.DataSource = dv;
+        }
+
+        private void dgvNhanVien_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataRowView r = (DataRowView)dgvNhanVien.Rows[e.RowIndex].DataBoundItem;
+
+            txtMa.Text = r.Row["manhanvien"].ToString();
+            txtTenNV.Text = r.Row["hoten"].ToString();
+            txtDiaChi.Text = r.Row["dachi"].ToString();
+            txtTenDN.Text = r.Row["tendangnhap"].ToString();
+            txtMatKhau.Text = r.Row["matkhau"].ToString();
+            cboQuyen.Text = r.Row["quyenhan"].ToString();
+        }
+        private void btnHienThi_Click(object sender, EventArgs e)
+        {
+            dgvNhanVien.DataSource = dtNhanVien;
         }
     }
 }

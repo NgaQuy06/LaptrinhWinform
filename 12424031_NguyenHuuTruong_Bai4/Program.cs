@@ -1,16 +1,17 @@
-﻿using System;
+﻿using BaiThucHanh4;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-namespace BaiThucHanh3
+namespace BaiThucHanh4
 {
     internal static class Program
     {
         public static DataHelper Db;
-        
+
         [STAThread]
         static void Main()
         {
