@@ -1,0 +1,11 @@
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\obj\Debug\ServerSocket.csproj.AssemblyReference.cache
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\obj\Debug\ServerSocket.Properties.Resources.resources
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\obj\Debug\ServerSocket.csproj.GenerateResource.cache
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\obj\Debug\ServerSocket.csproj.CoreCompileInputs.cache
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\bin\Debug\ServerSocket.exe.config
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\bin\Debug\ServerSocket.exe
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\bin\Debug\ServerSocket.pdb
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\obj\Debug\ServerSocket.exe
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\obj\Debug\ServerSocket.pdb
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\obj\Debug\ServerSocket.exe.config
+D:\c#\nam 2\winform\AppChatLan\ServerSocket\obj\Debug\ServerSocket.ClientInfo.resources

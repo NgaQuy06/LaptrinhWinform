@@ -1,0 +1,12 @@
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.csproj.AssemblyReference.cache
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.frmClient.resources
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.Properties.Resources.resources
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.frmServer.resources
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.csproj.GenerateResource.cache
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.csproj.CoreCompileInputs.cache
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\bin\Debug\AppChatLan.exe.config
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\bin\Debug\AppChatLan.exe
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\bin\Debug\AppChatLan.pdb
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.exe
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.pdb
+D:\c#\nam 2\winform\AppChatLan\AppChatLan\obj\Debug\AppChatLan.exe.config
