@@ -158,7 +158,6 @@ namespace BaiThucHanh5
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            // Validate chung
             if (!decimal.TryParse(txtGia.Text, out decimal price) || price < 0)
             {
                 MessageBox.Show("Don gia khong hop le!");
@@ -170,8 +169,6 @@ namespace BaiThucHanh5
                 MessageBox.Show("So luong khong hop le!");
                 return;
             }
-
-            // ===== THem moi =====
             if (isAdding)
             {
                 string code = txtMaSach.Text.Trim();
@@ -216,7 +213,6 @@ namespace BaiThucHanh5
                 MessageBox.Show("Cap nhat thanh cong!");
             }
 
-            // Reset trang thai
             isAdding = false;
             isEditing = false;
 

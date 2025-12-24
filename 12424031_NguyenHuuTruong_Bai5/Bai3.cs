@@ -12,7 +12,7 @@ namespace BaiThucHanh5
 {
     public partial class Bai3 : Form
     {
-        DataHelper dh;
+        QLSV1Entities1 db = new QLSV1Entities1();
         public Bai3()
         {
             InitializeComponent();
@@ -20,36 +20,54 @@ namespace BaiThucHanh5
 
         private void Bai3_Load(object sender, EventArgs e)
         {
-            dh = new DataHelper(@"DESKTOP-R5QKMVL\SQLEXPRESS", "QLSV1");
-            DataTable dt = dh.FillDataTable(@"select MaSV, LEFT(Hoten, CHARINDEX(' ', Hoten + ' ') - 1) AS HoSV, RIGHT(Hoten, CHARINDEX(' ', REVERSE(Hoten)) - 1) AS TenSV, Ngaysinh from Sinhvien");
-            foreach(DataRow row in dt.Rows)
+            var sv = db.Sinhviens.ToList();
+            foreach (var s in sv)
             {
-                string[] str = { row["MaSV"].ToString(), row["HoSV"].ToString(), row["TenSV"].ToString(), row["Ngaysinh"].ToString() };
+                string hosv = s.Hoten.Split(' ')[0];
+                string tensv = s.Hoten.Split(' ')[1] + " " + s.Hoten.Split(' ')[2];
+                string[] str = { s.MaSV, hosv, tensv, s.Ngaysinh.ToString() };
                 lstView.Items.Add(new ListViewItem(str));
             }
+            lblTongSV.Text = lstView.Items.Count.ToString();
             LoadCboMaKhoa();
         }
         private void LoadCboMaKhoa()
         {
-            DataTable dt = dh.FillDataTable("select Makhoa from Khoa");
-            foreach (DataRow row in dt.Rows)
+            db.Khoas.ToList();
+            foreach (var k in db.Khoas)
             {
-                cboMaKhoa.Items.Add(row["Makhoa"].ToString());
+                cboMaKhoa.Items.Add(k.Makhoa);
             }
         }
 
         private void cboMaKhoa_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboMaKhoa.SelectedIndex < 0) return;
-            string makhoa = cboMaKhoa.SelectedItem.ToString();
             lstView.Items.Clear();
-            DataTable dt = dh.FillDataTable($@"select sv.MaSV, LEFT(Hoten, CHARINDEX(' ', Hoten + ' ') - 1) AS HoSV, RIGHT(Hoten, CHARINDEX(' ', REVERSE(Hoten)) - 1) AS TenSV, Ngaysinh, Tenkhoa from Sinhvien sv join Lop l on sv.Malop = l.Malop join Khoa k on l.Makhoa = k.Makhoa where k.Makhoa = '{makhoa}'");
-            foreach (DataRow row in dt.Rows)
+            string makhoa = cboMaKhoa.SelectedItem.ToString();
+            var sinhvien = db.Sinhviens.ToList();
+            foreach (var ss in sinhvien)
             {
-                string[] str = { row["MaSV"].ToString(), row["HoSV"].ToString(), row["TenSV"].ToString(), row["Ngaysinh"].ToString() };
-                lstView.Items.Add(new ListViewItem(str));
-                txtTenKhoa.Text = row["Tenkhoa"].ToString();
+                var lop = db.lops.Where(l => l.Makhoa == makhoa);
+                var tenkhoa = db.Khoas.Where(mk => mk.Makhoa == makhoa).Select(k => k.Tenkhoa);
+                txtTenKhoa.Text = tenkhoa.FirstOrDefault();
+                foreach (var l in lop)
+                {
+                    if (ss.Malop == l.Malop)
+                    {
+                        string hosv = ss.Hoten.Split(' ')[0];
+                        string tensv = ss.Hoten.Split(' ')[1] + " " + ss.Hoten.Split(' ')[2];
+                        string[] str = { ss.MaSV, hosv, tensv, ss.Ngaysinh.ToString() };
+                        lstView.Items.Add(new ListViewItem(str));
+                    }
+                }
+                lblTongSV.Text = lstView.Items.Count.ToString();
             }
+        }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

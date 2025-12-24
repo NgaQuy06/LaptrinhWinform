@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,6 @@ namespace BaiThucHanh5
 {
     public partial class Bai2 : Form
     {
-        DataHelper dh;
         private QLSV1Entities1 db;
         public Bai2()
         {
@@ -22,20 +22,36 @@ namespace BaiThucHanh5
         private void Bai2_Load(object sender, EventArgs e)
         {
             db = new QLSV1Entities1();
-            dgv.Columns.Clear();
-            var ds = db.Database.SqlQuery<QLSV1Entities1>("exec BTH5_Bai2_01").ToList();
-            dgv.DataSource = ds;
+            var sv = db.Sinhviens.ToList();
+            foreach (var s in sv)
+            {
+                string hosv = s.Hoten.Split(' ')[0];
+                string tenSV = s.Hoten.Split(' ')[1] + " " + s.Hoten.Split(' ')[2];
+                var diem = db.Bangdiems.Where(masv => masv.Masv == s.MaSV).Select(dieml1 => dieml1.DiemL1);
+                dgv.Rows.Add(s.MaSV, hosv, tenSV, s.Ngaysinh, diem.FirstOrDefault());
+            }
             LoadCboMaMH();
         }
 
         private void LoadCboMaMH()
         {
-            
+            var mamh = db.Monhocs.Select(m => m.MaMH);
+            cboMaMH.DataSource = mamh.ToList();
+            cboMaMH.SelectedIndex = -1;
         }
 
         private void cboMaMH_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            if (cboMaMH.SelectedIndex == -1) return;
+            var sv = db.Sinhviens.ToList();
+            dgv.Rows.Clear();
+            foreach (var s in sv)
+            {
+                string hosv = s.Hoten.Split(' ')[0];
+                string tenSV = s.Hoten.Split(' ')[1] + " " + s.Hoten.Split(' ')[2];
+                var diem = db.Bangdiems.Where(d => d.MaMh == cboMaMH.SelectedItem.ToString() && d.Masv == s.MaSV);
+                dgv.Rows.Add(s.MaSV, hosv, tenSV, s.Ngaysinh, diem.FirstOrDefault());
+            }
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
